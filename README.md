@@ -90,4 +90,5 @@ Feel free to learn from and experiment with the code, but please respect the ter
 ## Support
 
 For support, issues, or enhancements, please open an issue in this repository or join our discord support server.
+
 [Join Support Server](https://discord.gg/thunderstruck)
