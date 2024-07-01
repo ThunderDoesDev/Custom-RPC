@@ -21,8 +21,8 @@ This project is a Node.js application that sets up and manages a Discord Rich Pr
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/your-username/discord-rpc-client.git
-    cd discord-rpc-client
+    git clone https://github.com/ThunderDoesDev/Custom-RPC.git
+    cd Custom-RPC
     ```
 
 2. Install dependencies:
