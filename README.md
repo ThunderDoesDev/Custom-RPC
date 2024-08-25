@@ -89,4 +89,4 @@ This project is licensed under the APACHE License - see the [LICENSE](LICENSE) f
 
 For support, issues, or enhancements, please open an issue in this repository or join our discord support server.
 
-[Join Support Server](https://discord.gg/thunderstruck)
+[Join Support Server](https://discord.gg/thunderdoesdev)
