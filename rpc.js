@@ -1,4 +1,4 @@
-const RPC = require('discord-rpc');
+const RPC = process.env.MOCK_RPC ? require(process.env.MOCK_RPC) : require('discord-rpc');
 const config = require('./Settings/config.json');
 const logger = require('./Functions/logger');
 const errors = require('./Functions/errors');
@@ -47,11 +47,14 @@ const activities = [{
     }
 ];
 
-function setActivities() {
+function setActivities(client = rpc) {
     let index = 0;
+    let retryCount = 0;
+    const maxRetries = 3;
+
     const updateActivity = () => {
         if (index < activities.length) {
-            rpc.setActivity(activities[index])
+            client.setActivity(activities[index])
                 .then(() => {
                     if (activities.length > 1) {
                         logger.log('PRESENCES', `Updated to activity ${index + 1}.`);
@@ -59,17 +62,20 @@ function setActivities() {
                         logger.log('PRESENCE', `Updated to the only activity.`);
                     }
                     index++;
+                    retryCount = 0;
                     setTimeout(updateActivity, config.status_timeout);
                 })
                 .catch((error) => {
                     logger.error('RPC Error', `Failed to set activity ${index + 1}.`);
-                    errors(rpc, error.stack);
+                    errors(client, error.stack);
                     if (retryCount < maxRetries) {
-                        logger.error('RPC Error', `Retrying to set activity ${index + 1} (${retryCount + 1}/${maxRetries}).`);
-                        setTimeout(() => setActivities(retryCount + 1), 5000);
+                        retryCount++;
+                        logger.error('RPC Error', `Retrying to set activity ${index + 1} (${retryCount}/${maxRetries}).`);
+                        setTimeout(updateActivity, 5000);
                     } else {
                         logger.error('RPC Error', `Max retries reached for activity ${index + 1}. Skipping to the next activity.`);
                         index++;
+                        retryCount = 0;
                         setTimeout(updateActivity, config.status_timeout);
                     }
                 });
@@ -78,6 +84,7 @@ function setActivities() {
             setTimeout(updateActivity, config.status_timeout);
         }
     };
+
     updateActivity();
 }
 
@@ -132,4 +139,12 @@ process.on('SIGINT', () => {
         });
 });
 
-loginRpc();
+if (require.main === module) {
+    loginRpc();
+}
+
+module.exports = {
+    setActivities,
+    loginRpc,
+    rpc,
+};
