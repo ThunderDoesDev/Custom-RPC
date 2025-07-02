@@ -4,7 +4,7 @@
   "description": "Customize your Discord profile with rotating rich presence activities using this Node.js app.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/test.js"
   },
   "author": "ThunderDoesDev",
   "dependencies": {
